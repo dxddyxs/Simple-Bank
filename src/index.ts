@@ -1,8 +1,17 @@
-interface User {
-    name: string;
+class Account {
     balance: number;
-    get(result: number): string
+
+    constructor(initialBalance: number) {
+        this.balance = initialBalance;
+    }
+
+    executeOperation(value: number): void;
+
+    getBalance(): number {
+        return this.balance;
+    }
 }
+
 
 class Bank implements User {
     constructor(public name: string, public balance: number) { }
@@ -27,7 +36,3 @@ class Bank implements User {
         return this.get(result);
     }
 }
-
-const bank = new Bank('Dereck', 1000);
-console.log(bank.add(1000))
-console.log(bank.pay(500))

@@ -12,27 +12,13 @@ class Account {
     }
 }
 
+class Deposit extends Account {
+    executeOperation(value: number): void {
+        if (value <= 0) {
+            console.log("Deposit amount must be positive.");
+        }
 
-class Bank implements User {
-    constructor(public name: string, public balance: number) { }
-
-    get(result: number): string {
-        return `
-        Name: ${this.name} 
-        Balance: ${result}
-        `
-    }
-
-    public add(a: number) {
-        const result = this.balance + a;
-        console.log("Payment Successful");
-        return this.get(result)
-    }
-
-
-    public pay(a: number) {
-        const result = this.balance - a;
-        console.log(`Payment successful`);
-        return this.get(result);
+        this.balance += value;
+        console.log(`Deposited: ${value}. New balance: ${this.getBalance()}`);
     }
 }

@@ -1,44 +1,48 @@
 # Bank Account System
 
-A TypeScript implementation of a banking system with account management, deposits, and payments.
+A TypeScript implementation of a small banking example with account management, deposits, and payments
 
 ## Features
 
-- **Account Management**: Base account class with balance tracking
-- **Deposits**: Add funds to accounts with validation
-- **Payments**: Withdraw funds with insufficient funds checks
+- Account management with private balance tracking
+- Validated deposits
+- Validated payments with insufficient funds check
 
 ## Classes
 
 ### Account
-Base class for all account operations.
-- `constructor(initialBalance: number)`: Initialize account with starting balance
-- `executeOperation(value: number)`: Abstract operation method
-- `getBalance(): number`: Get current account balance
+- `constructor(initialBalance?: number)` Initialize account with optional starting balance
+- `getBalance(): number` Return current balance
+- `deposit(value: number): void` Add funds to the account
+- `withdraw(value: number): boolean` Attempt withdrawal, returns false if insufficient funds
+
+### Operation
+Abstract base for account operations that require an Account instance
 
 ### Deposit
-Extends `Account` to handle deposit operations.
-- Validates that deposit amount is positive
-- Updates balance and logs transaction
+- Extends `Operation`
+- Validates positive amounts, performs deposit, logs the result
 
 ### Payment
-Extends `Account` to handle payment operations.
-- Validates payment amount is positive
-- Checks for sufficient funds before processing
-- Updates balance and logs transaction
+- Extends `Operation`
+- Validates positive amounts, checks funds, performs withdrawal, logs the result
 
 ## Usage
 
 ```typescript
-const account = new Account(1000);
-const deposit = new Deposit(1000);
-deposit.executeOperation(500);
+import './src/index'
 
-const payment = new Payment(1000);
-payment.executeOperation(200);
+const account = new Account()
+const deposit = new Deposit(account)
+deposit.execute(500)
+
+const payment = new Payment(account)
+payment.execute(200)
+
+console.log(`Final balance: ${account.getBalance()}`)
 ```
 
-## Running the Project
+## Running
 
 ```bash
 npx ts-node src/index.ts

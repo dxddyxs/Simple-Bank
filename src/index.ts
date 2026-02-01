@@ -1,48 +1,67 @@
 class Account {
-    balance: number;
+    private balance: number;
 
-    constructor(initialBalance: number) {
+    constructor(initialBalance: number = 0) {
+        if (initialBalance < 0) {
+            console.log("Initial balance cannot be negative.");
+        }
         this.balance = initialBalance;
     }
-
-    executeOperation(value: number): void { }
 
     public getBalance(): number {
         return this.balance;
     }
+
+    public deposit(value: number): void {
+        this.balance += value;
+    }
+
+    public withdraw(value: number): boolean {
+        if (value > this.balance) return false;
+        this.balance -= value;
+        return true;
+    }
 }
 
-class Deposit extends Account {
-    executeOperation(value: number): void {
+abstract class Operation {
+    protected account: Account;
+    constructor(account: Account) {
+        this.account = account;
+    }
+    abstract execute(value: number): void;
+}
+
+class Deposit extends Operation {
+    execute(value: number): void {
         if (value <= 0) {
             console.log("Deposit amount must be positive.");
-        }
-
-        this.balance += value;
-        console.log(`Deposited: ${value}. New balance: ${this.getBalance()}`);
-    }
-}
-
-class Payment extends Account {
-    executeOperation(value: number): void {
-        if (value <= 0) {
-            console.log("Payment amount must be positive.");
-        }
-
-        if (value > this.balance) {
-            console.log("Insufficient funds for this payment.");
             return;
         }
-
-        this.balance -= value;
-        console.log(`Paid: ${value}. New balance: ${this.getBalance()}`);
+        this.account.deposit(value);
+        console.log(`Deposited: $${value}. New Balance: $${this.account.getBalance()}`);
     }
 }
 
-let accountBank = new Account(1000);
-accountBank.executeOperation(500);
-console.log(`Current Balance: ${accountBank.getBalance()}`);
+class Payment extends Operation {
+    execute(value: number): void {
+        if (value <= 0) {
+            console.log("Payment value must be positive")
+            return;
+        }
+        if (!this.account.withdraw(value)) {
+            console.log("Insufficient funds for this payment");
+            return;
+        }
+        console.log(`Paid ${value}. New balance: ${this.account.getBalance()}`);
 
-let payAccount = new Payment(accountBank.getBalance());
-payAccount.executeOperation(200);
-console.log(`Current Balance after payment: ${payAccount.getBalance()}`);
+    }
+}
+
+const account = new Account();
+const deposit = new Deposit(account);
+deposit.execute(500);
+
+const payment = new Payment(account);
+payment.execute(200);
+
+console.log(`Final balance: ${account.getBalance()}`);

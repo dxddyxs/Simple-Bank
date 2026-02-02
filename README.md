@@ -1,49 +1,54 @@
 # Bank Account System
 
-A TypeScript implementation of a small banking example with account management, deposits, and payments
+A TypeScript implementation of a banking system with account management and transaction tracking.
 
 ## Features
 
-- Account management with private balance tracking
-- Validated deposits
-- Validated payments with insufficient funds check
+- **Account Management**: Create and manage bank accounts with initial balance
+- **Deposits**: Add funds to your account
+- **Payments**: Withdraw funds with validation
+- **Transaction History**: Track all deposits and payments with timestamps
+- **Transaction Status**: Monitor success/failed transaction states
 
-## Classes
+## Project Structure
 
-### Account
-- `constructor(initialBalance?: number)` Initialize account with optional starting balance
-- `getBalance(): number` Return current balance
-- `deposit(value: number): void` Add funds to the account
-- `withdraw(value: number): boolean` Attempt withdrawal, returns false if insufficient funds
-
-### Operation
-Abstract base for account operations that require an Account instance
-
-### Deposit
-- Extends `Operation`
-- Validates positive amounts, performs deposit, logs the result
-
-### Payment
-- Extends `Operation`
-- Validates positive amounts, checks funds, performs withdrawal, logs the result
+```
+Bank/
+├── src/
+│   └── index.ts
+├── README.md
+└── package.json
+```
 
 ## Usage
 
 ```typescript
-import './src/index'
+// Create an account
+const account = new Account(initialBalance);
 
-const account = new Account()
-const deposit = new Deposit(account)
-deposit.execute(500)
+// Perform a deposit
+const deposit = new Deposit(account);
+deposit.execute(500);
 
-const payment = new Payment(account)
-payment.execute(200)
+// Perform a payment
+const payment = new Payment(account);
+payment.execute(200);
 
-console.log(`Final balance: ${account.getBalance()}`)
+// View transactions
+console.log(account.getTransactions());
+console.log(`Balance: $${account.getBalance()}`);
 ```
 
-## Running
+## Classes
 
-```bash
-npx ts-node src/index.ts
-```
+- **Account**: Manages balance and transaction history
+- **Transaction**: Represents a single transaction record
+- **Operation**: Abstract base class for account operations
+- **Deposit**: Handles deposit operations
+- **Payment**: Handles payment/withdrawal operations
+
+## Getting Started
+
+1. Install dependencies: `npm install`
+2. Compile TypeScript: `tsc`
+3. Run: `node dist/index.js`

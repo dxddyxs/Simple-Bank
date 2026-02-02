@@ -1,5 +1,17 @@
+interface Transaction {
+    id: number;
+    category: 'Deposit' | 'Payment' | 'Other';
+    value: number;
+    timestamp: string;
+    status: 'sucess' | 'failed';
+    balanceAfter: number;
+    description?: string | undefined;
+}
+
 class Account {
     private balance: number;
+    private transations: Transaction[] = [];
+    private nextTransactionId: number = 1;
 
     constructor(initialBalance: number = 0) {
         if (initialBalance < 0) {
@@ -10,6 +22,24 @@ class Account {
 
     public getBalance(): number {
         return this.balance;
+    }
+
+    public registerTransaction(category: Transaction['category'], value: number, status: Transaction['status'], description?: string) {
+        const t: Transaction = {
+            id: this.nextTransactionId++,
+            category,
+            value,
+            timestamp: new Date().toISOString(),
+            status,
+            balanceAfter: this.getBalance(),
+            description,
+        };
+        this.transations.push(t);
+        return t;
+    }
+
+    public getTransactions(): Transaction[] {
+        return [...this.transations];
     }
 
     public deposit(value: number): void {
@@ -34,10 +64,12 @@ abstract class Operation {
 class Deposit extends Operation {
     execute(value: number): void {
         if (value <= 0) {
+            this.account.registerTransaction('Deposit', value, 'failed', 'Deposit amount must be positive.');
             console.log("Deposit amount must be positive.");
             return;
         }
         this.account.deposit(value);
+        this.account.registerTransaction('Deposit', value, 'sucess', 'ok')
         console.log(`Deposited: $${value}. New Balance: $${this.account.getBalance()}`);
     }
 }
@@ -45,15 +77,17 @@ class Deposit extends Operation {
 class Payment extends Operation {
     execute(value: number): void {
         if (value <= 0) {
+            this.account.registerTransaction('Payment', value, 'failed', 'Deposit amount must be positive')
             console.log("Payment value must be positive")
             return;
         }
         if (!this.account.withdraw(value)) {
+            this.account.registerTransaction('Other', value, 'failed', 'Insufficient funds')
             console.log("Insufficient funds for this payment");
             return;
         }
+        this.account.registerTransaction('Payment', value, 'sucess', 'ok');
         console.log(`Paid ${value}. New balance: ${this.account.getBalance()}`);
-
     }
 }
 
@@ -64,4 +98,5 @@ deposit.execute(500);
 const payment = new Payment(account);
 payment.execute(200);
 
+console.log(account.getTransactions());
 console.log(`Final balance: ${account.getBalance()}`);

@@ -1,4 +1,4 @@
-import { TransactionStore } from './transactionStore.js';
+import { TransactionStore } from './transactionStore';
 
 export class Account {
     private balance: number;

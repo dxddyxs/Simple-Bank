@@ -1,4 +1,4 @@
-import { Account } from "./account.js";
+import { Account } from "./account";
 
 export abstract class Operation {
     protected account: Account;

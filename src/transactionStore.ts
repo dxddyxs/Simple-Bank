@@ -1,4 +1,4 @@
-import type { Transaction, Category, Status } from './types.js';
+import type { Transaction, Category, Status } from './types';
 
 export class TransactionStore {
     private transactions: Transaction[] = [];

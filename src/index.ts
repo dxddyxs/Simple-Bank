@@ -1,58 +1,3 @@
-interface Transaction {
-    id: number;
-    category: 'Deposit' | 'Payment' | 'Other';
-    value: number;
-    timestamp: string;
-    status: 'sucess' | 'failed';
-    balanceAfter: number;
-    description?: string | undefined;
-}
-
-class Account {
-    private balance: number;
-    private transations: Transaction[] = [];
-    private nextTransactionId: number = 1;
-
-    constructor(initialBalance: number = 0) {
-        if (initialBalance < 0) {
-            console.log("Initial balance cannot be negative.");
-        }
-        this.balance = initialBalance;
-    }
-
-    public getBalance(): number {
-        return this.balance;
-    }
-
-    public registerTransaction(category: Transaction['category'], value: number, status: Transaction['status'], description?: string) {
-        const t: Transaction = {
-            id: this.nextTransactionId++,
-            category,
-            value,
-            timestamp: new Date().toISOString(),
-            status,
-            balanceAfter: this.getBalance(),
-            description,
-        };
-        this.transations.push(t);
-        return t;
-    }
-
-    public getTransactions(): Transaction[] {
-        return [...this.transations];
-    }
-
-    public deposit(value: number): void {
-        this.balance += value;
-    }
-
-    public withdraw(value: number): boolean {
-        if (value > this.balance) return false;
-        this.balance -= value;
-        return true;
-    }
-}
-
 abstract class Operation {
     protected account: Account;
     constructor(account: Account) {
@@ -69,7 +14,7 @@ class Deposit extends Operation {
             return;
         }
         this.account.deposit(value);
-        this.account.registerTransaction('Deposit', value, 'sucess', 'ok')
+        this.account.registerTransaction('Deposit', value, 'success', 'ok')
         console.log(`Deposited: $${value}. New Balance: $${this.account.getBalance()}`);
     }
 }
@@ -86,7 +31,7 @@ class Payment extends Operation {
             console.log("Insufficient funds for this payment");
             return;
         }
-        this.account.registerTransaction('Payment', value, 'sucess', 'ok');
+        this.account.registerTransaction('Payment', value, 'success', 'ok');
         console.log(`Paid ${value}. New balance: ${this.account.getBalance()}`);
     }
 }

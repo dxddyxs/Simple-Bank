@@ -1,54 +1,77 @@
 # Bank Account System
 
-A TypeScript implementation of a banking system with account management and transaction tracking.
+A TypeScript implementation of a banking system with account management, deposits, payments, and transaction tracking.
 
 ## Features
 
-- **Account Management**: Create and manage bank accounts with initial balance
-- **Deposits**: Add funds to your account
-- **Payments**: Withdraw funds with validation
-- **Transaction History**: Track all deposits and payments with timestamps
-- **Transaction Status**: Monitor success/failed transaction states
+- **Account Management** - Private balance tracking with validation
+- **Transaction Recording** - Complete audit trail with timestamps and operation details
+- **Operation Abstraction** - Extensible base class for account operations
+- **Type Safety** - Full TypeScript strict mode enabled
+- **Validated Transactions** - Deposits and payments with amount validation
+- **Insufficient Funds Protection** - Payment rejection when balance is insufficient
 
-## Project Structure
+## Classes
 
-```
-Bank/
-├── src/
-│   └── index.ts
-├── README.md
-└── package.json
-```
+### Account
+- `constructor(transactionStore: TransactionStore, initialBalance?: number)` - Initialize account with transaction store and optional starting balance
+- `getBalance(): number` - Return current balance
+- `deposit(value: number): void` - Add funds to the account
+- `withdraw(value: number): boolean` - Attempt withdrawal, returns false if insufficient funds
+
+### TransactionStore
+- `recordTransaction(category, value, status, description, balanceAfter): Transaction` - Log a transaction
+- `getTransactions(): Transaction[]` - Retrieve all transactions
+
+### Operation
+Abstract base for account operations that require an Account instance
+
+### Deposit
+- Extends `Operation`
+- Validates positive amounts, performs deposit, logs the result
+
+### Payment
+- Extends `Operation`
+- Validates positive amounts, checks funds, performs withdrawal, logs the result
+
+### Types
+- `Category` - Transaction category ('Deposit' | 'Payment' | 'Other')
+- `Status` - Transaction status ('success' | 'failed')
+- `Transaction` - Complete transaction record interface
 
 ## Usage
 
 ```typescript
-// Create an account
-const account = new Account(initialBalance);
+import './src/index'
 
-// Perform a deposit
-const deposit = new Deposit(account);
-deposit.execute(500);
+const transactionStore = new TransactionStore()
+const account = new Account(transactionStore, 1000)
 
-// Perform a payment
-const payment = new Payment(account);
-payment.execute(200);
+const deposit = new Deposit(account)
+deposit.execute(500)
 
-// View transactions
-console.log(account.getTransactions());
-console.log(`Balance: $${account.getBalance()}`);
+const payment = new Payment(account)
+payment.execute(200)
+
+console.log(`Final balance: ${account.getBalance()}`)
+console.log(transactionStore.getTransactions())
 ```
 
-## Classes
+## Running
 
-- **Account**: Manages balance and transaction history
-- **Transaction**: Represents a single transaction record
-- **Operation**: Abstract base class for account operations
-- **Deposit**: Handles deposit operations
-- **Payment**: Handles payment/withdrawal operations
+```bash
+npx ts-node src/index.ts
+```
 
-## Getting Started
+## Project Structure
 
-1. Install dependencies: `npm install`
-2. Compile TypeScript: `tsc`
-3. Run: `node dist/index.js`
+```
+src/
+├── account.ts           # Account class with balance and transaction management
+├── deposit.ts           # Deposit operation
+├── payment.ts           # Payment operation
+├── operation.ts         # Abstract operation base class
+├── transactionStore.ts  # Transaction history management
+├── types.ts            # TypeScript type definitions
+└── index.ts            # Application entry point
+```

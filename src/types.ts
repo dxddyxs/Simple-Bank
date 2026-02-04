@@ -8,5 +8,5 @@ export interface Transaction {
     timestamp: string;
     status: Status;
     balanceAfter: number;
-    description?: string;
+    description?: string | undefined;
 }

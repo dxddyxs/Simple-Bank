@@ -1,15 +1,3 @@
-type Category = 'Deposit' | 'Payment' | 'Other';
-
-interface Transaction {
-    id: number;
-    category: Category;
-    value: number;
-    timestamp: string;
-    status: 'success' | 'failed';
-    balanceAfter: number;
-    description?: string | undefined;
-}
-
 class Account {
     private balance: number;
     private transactions: Transaction[] = [];

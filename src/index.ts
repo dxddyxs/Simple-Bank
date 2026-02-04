@@ -1,16 +1,18 @@
+type Category = 'Deposit' | 'Payment' | 'Other';
+
 interface Transaction {
     id: number;
-    category: 'Deposit' | 'Payment' | 'Other';
+    category: Category;
     value: number;
     timestamp: string;
-    status: 'sucess' | 'failed';
+    status: 'success' | 'failed';
     balanceAfter: number;
     description?: string | undefined;
 }
 
 class Account {
     private balance: number;
-    private transations: Transaction[] = [];
+    private transactions: Transaction[] = [];
     private nextTransactionId: number = 1;
 
     constructor(initialBalance: number = 0) {
@@ -34,12 +36,12 @@ class Account {
             balanceAfter: this.getBalance(),
             description,
         };
-        this.transations.push(t);
+        this.transactions.push(t);
         return t;
     }
 
     public getTransactions(): Transaction[] {
-        return [...this.transations];
+        return [...this.transactions];
     }
 
     public deposit(value: number): void {
@@ -69,7 +71,7 @@ class Deposit extends Operation {
             return;
         }
         this.account.deposit(value);
-        this.account.registerTransaction('Deposit', value, 'sucess', 'ok')
+        this.account.registerTransaction('Deposit', value, 'success', 'ok')
         console.log(`Deposited: $${value}. New Balance: $${this.account.getBalance()}`);
     }
 }
@@ -86,7 +88,7 @@ class Payment extends Operation {
             console.log("Insufficient funds for this payment");
             return;
         }
-        this.account.registerTransaction('Payment', value, 'sucess', 'ok');
+        this.account.registerTransaction('Payment', value, 'success', 'ok');
         console.log(`Paid ${value}. New balance: ${this.account.getBalance()}`);
     }
 }

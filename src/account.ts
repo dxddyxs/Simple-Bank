@@ -20,4 +20,8 @@ export class Account {
         this.balance -= value;
         return true;
     }
+
+    public getBalance(): number {
+        return this.balance;
+    }
 }

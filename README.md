@@ -1,101 +1,84 @@
 # Bank Account System
 
-A robust TypeScript implementation of a banking system featuring account management, transaction tracking, and operation validation with complete audit trail.
+TypeScript banking application showcasing clean architecture and design patterns.
 
-## ✨ Features
+## Overview
 
-- **Account Management** - Secure private balance tracking with validation
-- **Transaction History** - Complete audit trail with timestamps, categories, and operation details
-- **Operation Pattern** - Extensible abstract base class for bank operations
-- **Type Safety** - Full TypeScript strict mode for reliability
-- **Input Validation** - All deposits and payments validated before execution
-- **Funds Protection** - Automatic rejection of payments exceeding available balance
-- **Status Tracking** - Success/failure logging for all transactions
+A simple yet professional banking system that demonstrates core software engineering principles: separation of concerns, type safety, and extensible design.
 
-## 🏗️ Architecture
+## Features
 
-### Account
-Core class managing account state and transaction recording
-- `constructor(transactionStore: TransactionStore, initialBalance?: number)` - Initialize with transaction store
-- `getBalance(): number` - Get current account balance
-- `deposit(value: number): void` - Record and execute deposit
-- `withdraw(value: number): boolean` - Attempt withdrawal with balance validation
+- Private account balance with encapsulation
+- Transaction history with audit trail
+- Polymorphic deposit and payment operations
+- Type-safe financial operations
+- Input validation and error handling
 
-### TransactionStore
-Manages complete transaction history and audit trail
-- `recordTransaction(category, value, status, description, balanceAfter): Transaction` - Record operation
-- `getTransactions(): Transaction[]` - Retrieve all transactions
+## Architecture
 
-### Operation (Abstract)
-Base class for extensible banking operations
-- Encapsulates common validation logic
-- Provides protected account access to subclasses
+### Core Classes
 
-### Deposit
-Implements deposit operation
+**Account** - Manages balance and coordinates operations
+- `constructor(transactionStore, initialBalance?)`
+- `deposit(value)` - Add funds
+- `withdraw(value)` - Remove funds (returns false if insufficient balance)
+
+**TransactionStore** - Records all transactions
+- `recordTransaction(category, value, status, description, balanceAfter)`
+- `getTransactions()` - Transaction history
+
+**Operation** - Abstract base for extensible operations
+- `execute(value)` - Implemented by subclasses
+
+**Deposit** - Credit operation
 - Validates positive amounts
-- Updates balance and records transaction
-- Logs all attempts (success/failure)
+- Always succeeds
 
-### Payment
-Implements payment/withdrawal operation
+**Payment** - Debit operation
 - Validates positive amounts
-- Checks sufficient funds before execution
-- Records transaction with final balance
-- Logs all attempts (success/failure)
+- Checks available funds
 
-### Types
-Type-safe definitions for banking operations
-- `Category` - 'Deposit' | 'Payment' | 'Other'
-- `Status` - 'success' | 'failed'
-- `Transaction` - Complete transaction record with metadata
-
-## 🚀 Quick Start
-
-### Usage
+## Usage
 
 ```typescript
-import './src/index'
+const store = new TransactionStore()
+const account = new Account(store, 1000)
 
-const transactionStore = new TransactionStore()
-const account = new Account(transactionStore, 1000)
-
-// Perform deposit
 const deposit = new Deposit(account)
 deposit.execute(500)
 
-// Perform payment
 const payment = new Payment(account)
 payment.execute(200)
 
-// Check final balance
-console.log(`Balance: ${account.getBalance()}`)
-
-// View transaction history
-console.log(transactionStore.getTransactions())
+console.log(account.getBalance()) // 1300
+console.log(store.getTransactions())
 ```
 
-### Running
+## Project Structure
+
+```
+src/
+├── account.ts
+├── operation.ts
+├── deposit.ts
+├── payment.ts
+├── transactionStore.ts
+├── types.ts
+└── index.ts
+```
+
+## Running
 
 ```bash
 npx ts-node src/index.ts
 ```
 
-## 📁 Project Structure
+## Design Patterns
 
-```
-src/
-├── account.ts           # Account balance & transaction management
-├── deposit.ts           # Deposit operation implementation
-├── payment.ts           # Payment operation implementation
-├── operation.ts         # Abstract operation base class
-├── transactionStore.ts  # Transaction history storage & retrieval
-├── types.ts            # TypeScript type definitions
-└── index.ts            # Application entry point
-```
+- **Strategy** - Interchangeable operation behaviors
+- **Repository** - Transaction data abstraction
+- **Dependency Injection** - Loose coupling
 
-## 🎓 Design Patterns
+## License
 
-- **Abstract Factory** - Operation base class for extensible operations
-- **Repository** - TransactionStore for data persistence
-- **Type Safety** - Full TypeScript strict mode compliance
+ISC

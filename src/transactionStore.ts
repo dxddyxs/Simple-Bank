@@ -1,6 +1,6 @@
-import type { Transaction, Category, Status } from './types';
+import type { Transaction, Category, Status } from './types.js';
 
-class TransactionStore {
+export class TransactionStore {
     private transactions: Transaction[] = [];
     private nextId = 1;
 
@@ -28,5 +28,3 @@ class TransactionStore {
         return [...this.transactions];
     }
 }
-
-export = TransactionStore;

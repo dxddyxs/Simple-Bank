@@ -1,6 +1,6 @@
 # Bank Account System
 
-TypeScript banking application showcasing clean architecture and design patterns.
+A minimal TypeScript banking application showcasing clean architecture and design patterns.
 
 ## Overview
 
@@ -22,6 +22,7 @@ A simple yet professional banking system that demonstrates core software enginee
 - `constructor(transactionStore, initialBalance?)`
 - `deposit(value)` - Add funds
 - `withdraw(value)` - Remove funds (returns false if insufficient balance)
+- `getBalance()` - Current balance
 
 **TransactionStore** - Records all transactions
 - `recordTransaction(category, value, status, description, balanceAfter)`

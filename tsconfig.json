@@ -1,39 +1,51 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+  "include": [
+    "./src/**/*"
+  ],
   "compilerOptions": {
-    // File Layout
+    /* - - Configuração de Build - - */
+    "tsBuildInfoFile": "./dist/.tsBuildInfo",
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "incremental": true,
+    "target": "ES2022",
     "rootDir": "./src",
     "outDir": "./dist",
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
+    /* - - Checagem de Tipos | Modo Strict - - */
+    "noPropertyAccessFromIndexSignature": true,
+    "noFallthroughCasesInSwitch": true,
     "exactOptionalPropertyTypes": true,
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-    // Recommended Options
+    "noUncheckedIndexedAccess": true,
+    "allowUnreachableCode": false,
+    "noImplicitOverride": true,
+    "allowUnusedLabels": false,
+    "noImplicitReturns": true,
     "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    /* - - Resolução de Módulos - - */
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
+    /* - - Emitir - - */
+    "removeComments": true,
+    "importHelpers": true,
+    "declaration": false,
+    "sourceMap": true,
+    /* - - Performance & Biblioteca - - */
     "skipLibCheck": true,
+    /* - - Mapeamento de Caminhos - - */
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
   }
 }

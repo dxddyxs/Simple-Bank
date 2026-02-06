@@ -1,4 +1,4 @@
-import { TransactionStore } from './transactionStore.js';
+import { TransactionStore } from './transactionStore';
 
 export class Account {
     private balance: number;
@@ -13,12 +13,15 @@ export class Account {
 
     public deposit(value: number): void {
         this.balance += value;
+        this.transactionStore.recordTransaction('Deposit', value, 'success', undefined, this.balance);
     }
 
     public withdraw(value: number): boolean {
         if (value > this.balance) return false;
         this.balance -= value;
+        this.transactionStore.recordTransaction('Payment', value, 'success', undefined, this.balance);
         return true;
+
     }
 
     public getBalance(): number {
